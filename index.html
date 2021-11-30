@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #info {
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body id='body'>
+    <div id='info'>
+      <input type='text' id='datat' placeholder='Data'>Input Data, seperate numbers with a comma, make sure there is no spaces and make sure that all data values are rounded to the same place
+      <button onclick='data()'>Submit</button>
+    </div>
+    <script>
+      function data() {
+        var x = document.getElementById('datat')
+        nms = x.value
+        nms = nms.split(',')
+        nms.sort()
+        a = 0
+        if (nms[0].includes('.')) {
+          dp = nms[0].split('.')[1].length
+        }
+        if ((nms[0].includes('.')) == false) {
+          dp = 0
+        }
+        dtv = 0
+        while (a < nms.length) {
+          dtv = dtv + parseFloat(nms[a])
+          a = a + 1
+        }
+        mean = dtv/nms.length
+        mean = (mean).toFixed(dp)
+        if (nms.length % 2 != 0) {
+          median = nms[((nms.length)-1)/2]
+          a = 0
+          lqf = ((nms.length/2).toFixed(0))-1
+          lqa = []
+          uqa = []
+          while (a < nms.length) {
+            if (a < lqf) {
+              lqa.push(nms[a])
+            }
+            if (a > lqf) {
+              uqa.push(nms[a])
+            }
+            a = a + 1
+          }
+          if (lqa.length % 2 != 0) {
+            lq = lqa[((lqa.length)-1)/2]
+            uq = uqa[((uqa.length)-1)/2]
+          }
+          if (lqa.length % 2 == 0) {
+            n1 = parseFloat(lqa[((((lqa.length))/2)-1)])
+            n2 = parseFloat(lqa[((((lqa.length))/2)-1)+1])
+            lq = ((n1+n2)/2)
+            lq = (lq).toFixed(dp)
+            n1 = parseFloat(uqa[((((uqa.length))/2)-1)])
+            n2 = parseFloat(uqa[((((uqa.length))/2)-1)+1])
+            uq = ((n1+n2)/2)
+            uq = (uq).toFixed(dp)
+          }
+          bz = 's'
+        }
+        if (nms.length % 2 == 0) {
+          n1 = parseFloat(nms[((((nms.length))/2)-1)])
+          n2 = parseFloat(nms[((((nms.length))/2)-1)+1])
+          median = ((n1+n2)/2)
+          median = (median).toFixed(dp)
+          a = 0
+          lqf = (nms.length/2)
+          lqa = []
+          uqa = []
+          while (a < nms.length) {
+            if (a < lqf) {
+              lqa.push(nms[a])
+            }
+            if (a >= lqf) {
+              uqa.push(nms[a])
+            }
+            a = a + 1
+          }
+          if (lqa.length % 2 != 0) {
+            lq = lqa[((lqa.length)-1)/2]
+            uq = uqa[((uqa.length)-1)/2]
+          }
+          if (lqa.length % 2 == 0) {
+            n1 = parseFloat(lqa[((((lqa.length))/2)-1)])
+            n2 = parseFloat(lqa[((((lqa.length))/2)-1)+1])
+            lq = ((n1+n2)/2)
+            lq = (lq).toFixed(dp)
+            n1 = parseFloat(uqa[((((uqa.length))/2)-1)])
+            n2 = parseFloat(uqa[((((uqa.length))/2)-1)+1])
+            uq = ((n1+n2)/2)
+            uq = (uq).toFixed(dp)
+          }
+        }
+        iqr = uq-lq
+        uf = parseFloat(uq)+(1.5*iqr)
+        uf = (uf).toFixed(dp)
+        lf = parseFloat(lq)-(1.5*iqr)
+        lf = (lf).toFixed(dp)
+        range = nms[(nms.length-1)] - nms[0]
+        range = (range).toFixed(dp)
+        ot = []
+        a = 0
+        while (a < nms.length) {
+          if (parseFloat(nms[a]) < parseFloat(lf)) {
+            ot.push(nms[a])
+          }
+          if (parseFloat(nms[a]) > parseFloat(uf)) {
+            ot.push(nms[a])
+          }
+          a = a + 1
+        }
+        if (ot.length == 0) {
+          ots = 'None'
+        }
+        if (ot.length != 0) {
+          ots = ot.join(', ')
+        }
+        var bd = document.getElementById('body')
+        var div = document.getElementById('results')
+        if (div == null) {
+          var div = document.createElement('div')
+        }
+        if (div != null) {
+          div.remove()
+          var div = document.createElement('div')
+        }
+        div.setAttribute('id', 'results')
+        mn = document.createElement('p')
+        mn.innerHTML = 'Mean: ' + mean
+        div.appendChild(mn)
+        mdn = document.createElement('p')
+        mdn.innerHTML = 'Median: ' + median
+        div.appendChild(mdn)
+        rng = document.createElement('p')
+        rng.innerHTML = 'Range: ' + range
+        div.appendChild(rng)
+        q1 = document.createElement('p')
+        q1.innerHTML = 'Q1: ' + lq
+        div.appendChild(q1)
+        q3 = document.createElement('p')
+        q3.innerHTML = 'Q3: ' + uq
+        div.appendChild(q3)
+        diqr = document.createElement('p')
+        diqr.innerHTML = 'IQR: ' + iqr
+        div.appendChild(diqr)
+        lwf = document.createElement('p')
+        lwf.innerHTML = 'Lower Fence: ' + lf
+        div.appendChild(lwf)
+        upf = document.createElement('p')
+        upf.innerHTML = 'Upper Fence: ' + uf
+        div.appendChild(upf)
+        otl = document.createElement('p')
+        otl.innerHTML = 'Outliers: ' + ots
+        div.appendChild(otl)
+        x.value = ''
+        bd.appendChild(div)
+      }
+    </script>
+  </body>
+</html>
